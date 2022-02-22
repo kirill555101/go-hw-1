@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"./calc"
 )
 
 func main() {
@@ -12,12 +11,12 @@ func main() {
 		return
 	}
 
-	postfixNotation, err := calc.GetPostfixNotation(os.Args[1])
+	postfixNotation, err := GetPostfixNotation(os.Args[1])
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	result, err := calc.Calculate(postfixNotation)
+	result, err := Calculate(postfixNotation)
 	if err != nil {
 		fmt.Println(err)
 		return

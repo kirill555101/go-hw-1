@@ -1,14 +1,45 @@
-package calc
+package main
 
 import (
 	"errors"
 	"strconv"
 	"strings"
-	"./stack"
 )
 
+type Stack struct {
+	buff []interface{}
+}
+
+func (stack *Stack) Len() int {
+	return len(stack.buff)
+}
+
+func (stack *Stack) Pop() (interface{}, error) {
+	len := len(stack.buff)
+	if len == 0 {
+		return ' ', errors.New("empty stack")
+	}
+
+	popEl := stack.buff[len-1]
+	stack.buff = stack.buff[:len-1]
+	return popEl, nil
+}
+
+func (stack *Stack) Push(val interface{}) {
+	stack.buff = append(stack.buff, val)
+}
+
+func (stack *Stack) Peek() (interface{}, error) {
+	len := len(stack.buff)
+	if len == 0 {
+		return ' ', errors.New("empty stack")
+	}
+
+	return stack.buff[len-1], nil
+}
+
 func GetPostfixNotation(str string) (string, error) {
-	stack := stack.New()
+	stack := Stack{buff: make([]interface{}, 0)}
 	isNum := false
 	result := ""
 
@@ -76,7 +107,7 @@ func GetPostfixNotation(str string) (string, error) {
 
 func Calculate(inputString string) (float64, error) {
 	str := strings.Split(inputString, " ")
-	stack := stack.New()
+	stack := &Stack{buff: make([]interface{}, 0)}
 
 	for _, val := range str {
 		num, isNum := strconv.ParseFloat(val, 64)

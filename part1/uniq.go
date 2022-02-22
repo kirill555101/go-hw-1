@@ -1,4 +1,4 @@
-package uniq
+package main
 
 import (
 	"strconv"
@@ -14,8 +14,8 @@ type Options struct {
 	i bool
 }
 
-func NewOptions(c, d, u bool, f, s int, i bool) *Options {
-	return &Options{
+func NewOptions(c, d, u bool, f, s int, i bool) Options {
+	return Options{
 		c: c,
 		d: d,
 		u: u,
@@ -37,7 +37,7 @@ func (options *Options) ResetParams() {
 	}
 }
 
-func Uniq(options *Options, text []string) []string {
+func Uniq(options Options, text []string) []string {
 	var result []string
 	var repeats int
 	previousLine := skip(options, text[0])
@@ -78,7 +78,7 @@ func Uniq(options *Options, text []string) []string {
 	return result
 }
 
-func show(options *Options, result *[]string, str string, repeats int) {
+func show(options Options, result *[]string, str string, repeats int) {
 	switch {
 	case options.c:
 		*result = append(*result, strconv.Itoa(repeats + 1) + " " + str)
@@ -88,7 +88,7 @@ func show(options *Options, result *[]string, str string, repeats int) {
 	}
 }
 
-func skip(options *Options, str string) string {
+func skip(options Options, str string) string {
 	fields := strings.Split(str, " ")
 	if len(fields) < options.f {
 		return "\n"

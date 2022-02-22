@@ -1,69 +1,42 @@
 package main
 
-import (
-	"testing"
-	"./calc"
-)
+import "testing"
 
-func TestAddSuccess(t *testing.T) {
-	polishStr := "1 2 +"
-	result, err := calc.Calculate(polishStr)
+var testsCalc = []struct {
+	polishStr string
+	expected float64
+}{
+	{"1 2 +", 3},
+	{"10 5 -", 5},
+	{"2 2 *", 4},
+	{"6 3 /", 2},
+	{"69 0 /", 0},
+}
 
-	if result != 3 && err != nil {
-		t.Fatalf("Add test failed on %s", err)
+var testsPolishNotation = []struct {
+	str string
+	expected string
+}{
+	{"(8+2*5)/(1+3*2-4)", "8 2 5 * + 1 3 2 * + 4 - /"},
+	{"(8PLUS2*5)/(1+3*2-4)", ""},
+}
+
+func TestCalculate(t *testing.T) {
+	for _, e := range testsCalc {
+		result, err := Calculate(e.polishStr)
+
+		if result != e.expected && err != nil {
+			t.Fatalf("Test has been failed")
+		}
 	}
 }
 
-func TestSubSuccess(t *testing.T) {
-	polishStr := "10 5 -"
-	result, err := calc.Calculate(polishStr)
+func TestPolishNotation(t *testing.T) {
+	for _, e := range testsPolishNotation {
+		result, err := GetPostfixNotation(e.str)
 
-	if result != 5 && err != nil {
-		t.Fatalf("Sub test failed on %s", err)
-	}
-}
-
-func TestMulSuccess(t *testing.T) {
-	polishStr := "2 2 *"
-	result, err := calc.Calculate(polishStr)
-
-	if result != 4 && err != nil {
-		t.Fatalf("Mul test failed on %s", err)
-	}
-}
-
-func TestDivSuccess(t *testing.T) {
-	polishStr := "6 3 /"
-	result, err := calc.Calculate(polishStr)
-
-	if result != 2 && err != nil {
-		t.Fatalf("Div test failed on %s", err)
-	}
-}
-
-func TestDivFail(t *testing.T) {
-	polishStr := "69 0 /"
-	_, err := calc.Calculate(polishStr)
-
-	if err != nil {
-		t.Fatalf("Div test not failed on %s", err)
-	}
-}
-
-func TestPolishNotationSuccess(t *testing.T) {
-	str := "(8+2*5)/(1+3*2-4)"
-	result, err := calc.GetPostfixNotation(str)
-
-	if result != "8 2 5 * + 1 3 2 * + 4 - /" && err != nil {
-		t.Fatalf("Polish notation test failed on %s, result is %s", result, err)
-	}
-}
-
-func TestPolishNotationFail(t *testing.T) {
-	str := "(8PLUS2*5)/(1+3*2-4)"
-	_, err := calc.GetPostfixNotation(str)
-
-	if err == nil {
-		t.Fatalf("Polish notation test not failed on %s", str)
+		if result != e.expected && err != nil {
+			t.Fatalf("Test has been failed")
+		}
 	}
 }

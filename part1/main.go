@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"./uniq"
 )
 
 func ReadText(inputFile *os.File) (text []string, err error) {
@@ -24,7 +23,7 @@ func ReadText(inputFile *os.File) (text []string, err error) {
 	return text, nil
 }
 
-func InitFlags() (*uniq.Options, error) {
+func InitFlags() (Options, error) {
 	flagCPtr := flag.Bool("c", false, "For number of occurrences of lines in the input_file")
 	flagDPtr := flag.Bool("d", false, "Print only those lines that were repeated in the input_file data")
 	flagUPtr := flag.Bool("u", false, "Print only those lines that have not been repeated in the input_file data")
@@ -35,7 +34,7 @@ func InitFlags() (*uniq.Options, error) {
 
 	flag.Parse()
 
-	options := uniq.NewOptions(
+	options := NewOptions(
 		*flagCPtr,
 		*flagDPtr,
 		*flagUPtr,
@@ -102,7 +101,7 @@ func main() {
 		return
 	}
 
-	for _, str := range uniq.Uniq(options, text) {
+	for _, str := range Uniq(options, text) {
 		_, err = outputFile.WriteString(str + "\n")
 		if err != nil {
 			fmt.Println(err)
