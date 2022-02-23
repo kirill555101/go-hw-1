@@ -13,14 +13,6 @@ var testsCalc = []struct {
 	{"69 0 /", 0},
 }
 
-var testsPolishNotation = []struct {
-	str string
-	expected string
-}{
-	{"(8+2*5)/(1+3*2-4)", "8 2 5 * + 1 3 2 * + 4 - /"},
-	{"(8PLUS2*5)/(1+3*2-4)", ""},
-}
-
 func TestCalculate(t *testing.T) {
 	for _, e := range testsCalc {
 		result, err := Calculate(e.polishStr)
@@ -29,6 +21,14 @@ func TestCalculate(t *testing.T) {
 			t.Fatalf("Test has been failed")
 		}
 	}
+}
+
+var testsPolishNotation = []struct {
+	str string
+	expected string
+}{
+	{"(8+2*5)/(1+3*2-4)", "8 2 5 * + 1 3 2 * + 4 - /"},
+	{"(8PLUS2*5)/(1+3*2-4)", ""},
 }
 
 func TestPolishNotation(t *testing.T) {
